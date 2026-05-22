@@ -1,0 +1,76 @@
+name: Add Members to Contributor Team
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'members.json'
+
+permissions:
+  contents: read
+  members: write
+
+jobs:
+  add-members:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read members.json and add to team
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            
+            // Read members.json
+            const membersData = fs.readFileSync('members.json', 'utf8');
+            const members = JSON.parse(membersData);
+            
+            if (!Array.isArray(members)) {
+              console.log('members.json is not an array');
+              return;
+            }
+            
+            // Get the team to add members to
+            const teamSlug = 'contributors';
+            
+            console.log(`Found ${members.length} members to add to team`);
+            
+            // Add each member to the team
+            for (const member of members) {
+              try {
+                if (!member.github) {
+                  console.log(`Skipping member without github username: ${member.name}`);
+                  continue;
+                }
+                
+                // Check if user exists
+                const user = await github.rest.users.getByUsername({
+                  username: member.github
+                });
+                
+                console.log(`User ${member.github} found, adding to team...`);
+                
+                // Add user to the team
+                await github.rest.teams.addMembershipForUserInOrg({
+                  org: context.repo.owner,
+                  team_slug: teamSlug,
+                  username: member.github,
+                  role: 'member'
+                });
+                
+                console.log(`✓ Added ${member.github} to ${teamSlug} team`);
+              } catch (error) {
+                // If user is already in team or doesn't exist, that's okay
+                if (error.status === 422) {
+                  console.log(`${member.github} is already a member of the team or cannot be added`);
+                } else if (error.status === 404) {
+                  console.log(`⚠ User ${member.github} not found on GitHub`);
+                } else {
+                  console.error(`Error adding ${member.github} to team:`, error.message);
+                }
+              }
+            }
