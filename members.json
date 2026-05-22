@@ -6,5 +6,13 @@
     "skills": ["JavaScript", "Python","TypeScript","C","Flutter","Dart","Node.js","CI/CD"],
     "student_at": "Tula's Institute, Dehradun",
     "joined": "2024-06-20"
+  },
+  {
+    "name": "Sid Kr.",
+    "github": "sidkr222003",
+    "role": "contributor, administrator",
+    "skills": ["JavaScript", "Python","TypeScript","C","Flutter","Dart","Node.js","CI/CD","CLI Tools"],
+    "student_at": "VMSBUTU, Dehradun",
+    "joined": "2025-09-22"
   }
 ]
