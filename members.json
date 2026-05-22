@@ -1,1 +1,10 @@
-[]
+[
+  {
+    "name": "Nitish Kumar",
+    "github": "nk2552003",
+    "role": "contributor, administrator",
+    "skills": ["JavaScript", "Python","TypeScript","C","Flutter","Dart","Node.js","CI/CD"],
+    "student_at": "Tula's Institute, Dehradun",
+    "joined": "2024-06-20"
+  }
+]
