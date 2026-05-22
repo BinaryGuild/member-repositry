@@ -9,7 +9,6 @@ on:
 
 permissions:
   contents: read
-  members: write
 
 jobs:
   add-members:
